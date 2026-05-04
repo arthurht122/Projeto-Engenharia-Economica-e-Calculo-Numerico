@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReinvestPro - Calculadora de Reinvestimento Inteligente</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ============ SEÇÃO 1: APRESENTAÇÃO DO PRODUTO ============ -->
+    <section id="hero" class="page active">
+        <nav class="navbar">
+            <div class="logo">ReinvestPro</div>
+            <div class="nav-links">
+                <a href="#features">Recursos</a>
+                <a href="#plans">Planos</a>
+                <a href="#" onclick="goTo('register'); return false;" class="btn-nav">Começar</a>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Maximize seus investimentos com <span class="highlight">precisão matemática</span></h1>
+                <p class="subtitle">
+                    Plataforma profissional baseada em Engenharia Econômica e Cálculo Numérico.
+                    Calcule rendimentos por reinvestimento usando Juros Compostos e o Método de Newton-Raphson.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="goTo('register')">Calcular K Grátis</button>
+                    <button class="btn-secondary" onclick="scrollToSection('features')">Saiba Mais</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <h3>+R$18k</h3>
+                        <p>Resgate médio simulado</p>
+                    </div>
+                    <div class="stat">
+                        <h3>26%</h3>
+                        <p>Rendimento anual médio</p>
+                    </div>
+                    <div class="stat">
+                        <h3>100%</h3>
+                        <p>Precisão Newton-Raphson</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="card-3d">
+                    <div class="formula-card">
+                        <h4>Fórmula Principal</h4>
+                        <div class="formula">
+                            K = (1+i)<sup>n</sup> − (n·i + 1)
+                        </div>
+                        <p>Diferença entre Juros Compostos e Simples</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features" id="features">
+            <h2>Por que escolher o ReinvestPro?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Cálculo de Período</h3>
+                    <p>Determine o tempo exato para atingir seu lucro desejado por reinvestimento.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Análise TMA</h3>
+                    <p>Calcule o período necessário para alcançar sua Taxa Mínima de Atratividade.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Newton-Raphson</h3>
+                    <p>Aproximações ultra-precisas com método numérico de convergência rápida.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💎</div>
+                    <h3>Fluxo de Caixa</h3>
+                    <p>Visualize a evolução trimestral completa do seu investimento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SEÇÃO 2: CADASTRO ============ -->
+    <section id="register" class="page">
+        <div class="form-container">
+            <button class="btn-back" onclick="goTo('hero')">← Voltar</button>
+            <div class="form-card">
+                <h2>Crie sua conta gratuita</h2>
+                <p class="form-subtitle">Comece agora a calcular seus rendimentos</p>
+
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="name">Nome Completo</label>
+                        <input type="text" id="name" required placeholder="Seu nome">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" required placeholder="seu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" required placeholder="(00) 00000-0000">
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Cadastrar e Continuar</button>
+                </form>
+                <p class="form-footer">
+                    Ao se cadastrar você terá acesso ao cálculo de K grátis.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SEÇÃO 3: CÁLCULO DE K GRÁTIS ============ -->
+    <section id="calculator" class="page">
+        <div class="calc-container">
+            <button class="btn-back" onclick="goTo('register')">← Voltar</button>
+            <div class="calc-header">
+                <span class="badge">GRÁTIS</span>
+                <h2>Calculadora de K — Juros Compostos</h2>
+                <p>Descubra o rendimento por reinvestimento (juros compostos) do seu capital.</p>
+            </div>
+
+            <div class="calc-grid">
+                <div class="calc-form">
+                    <h3>Informe seus dados</h3>
+                    <div class="form-group">
+                        <label for="vp">Valor Presente (VP) — R$</label>
+                        <input type="number" id="vp" value="10000" step="100" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="i">Taxa de Juros Simples (i) — decimal a.t.</label>
+                        <input type="number" id="i" value="0.05" step="0.01" min="0">
+                        <small>Ex: 0.05 = 5% ao trimestre</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="n">Período (n) — trimestres</label>
+                        <input type="number" id="n" value="15" step="1" min="1">
+                    </div>
+                    <button class="btn-primary btn-full" onclick="calcularK()">Calcular K</button>
+                </div>
+
+                <div class="calc-result" id="result">
+                    <h3>Resultado</h3>
+                    <div class="result-empty" id="resultEmpty">
+                        <p>Preencha os dados e clique em "Calcular K"</p>
+                    </div>
+                    <div class="result-content" id="resultContent" style="display:none;">
+                        <div class="result-item highlight-result">
+                            <span class="result-label">K (Juros Compostos)</span>
+                            <span class="result-value" id="resK">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Lucro Total (%)</span>
+                            <span class="result-value" id="resLucro">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Valor Acumulado</span>
+                            <span class="result-value" id="resTotal">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Rendimento Anual</span>
+                            <span class="result-value" id="resAnual">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="upgrade-cta">
+                <h3>Quer mais? Acesse simulações avançadas, métricas e gráficos</h3>
+                <button class="btn-primary" onclick="goTo('plans')">Ver Planos →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SEÇÃO 4: PLANOS ============ -->
+    <section id="plans" class="page">
+        <div class="plans-container">
+            <button class="btn-back" onclick="goTo('calculator')">← Voltar</button>
+            <div class="plans-header">
+                <h2>Escolha o plano ideal para você</h2>
+                <p>Acesso completo às ferramentas profissionais de Engenharia Econômica</p>
+            </div>
+
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Plus</h3>
+                        <div class="plan-price">
+                            <span class="currency">R$</span>
+                            <span class="amount">100</span>
+                            <span class="period">/mês</span>
+                        </div>
+                    </div>
+                    <ul class="plan-features">
+                        <li>✓ Acesso a 3 simulações por mês</li>
+                        <li>✓ Acesso a métricas</li>
+                        <li class="disabled">✗ Gráficos avançados</li>
+                        <li class="disabled">✗ Exportação Excel</li>
+                    </ul>
+                    <button class="btn-primary btn-full" onclick="selectPlan('plus', 100)">Assinar Plus</button>
+                </div>
+
+                <div class="plan-card featured">
+                    <div class="plan-badge">RECOMENDADO</div>
+                    <div class="plan-header">
+                        <h3>Enterprise</h3>
+                        <div class="plan-price">
+                            <span class="currency">R$</span>
+                            <span class="amount">1.500</span>
+                            <span class="period">/mês</span>
+                        </div>
+                    </div>
+                    <ul class="plan-features">
+                        <li>✓ Acessos ilimitados</li>
+                        <li>✓ Acesso a métricas</li>
+                        <li>✓ Gráficos avançados</li>
+                        <li>✓ Exportação Excel</li>
+                    </ul>
+                    <button class="btn-primary btn-full" onclick="selectPlan('enterprise', 1500)">Assinar Enterprise</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SEÇÃO 5: PAGAMENTO (PÁGINA EM BRANCO) ============ -->
+    <section id="payment" class="page">
+        <div class="payment-container">
+            <button class="btn-back" onclick="goTo('plans')">← Voltar</button>
+            <div class="payment-card">
+                <h2>Pagamento</h2>
+                <div class="payment-summary">
+                    <p>Plano selecionado: <strong id="selectedPlan">-</strong></p>
+                    <p>Valor: <strong id="selectedPrice">-</strong></p>
+                </div>
+                <div class="payment-blank">
+                    <p>Página de pagamento</p>
+                </div>
+                <button class="btn-primary btn-full" onclick="confirmPayment()">Confirmar Pagamento</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SEÇÃO 6: DASHBOARD (CÁLCULOS E ARQUIVOS) ============ -->
+    <section id="dashboard" class="page">
+        <div class="dashboard-container">
+            <header class="dashboard-header">
+                <div class="logo">ReinvestPro</div>
+                <div class="user-info">
+                    <span id="dashUserName">Usuário</span>
+                    <span class="plan-tag" id="dashPlanTag">-</span>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <h2>Bem-vindo ao seu painel</h2>
+                <p class="dash-subtitle" id="dashSubtitle">Acesso liberado conforme seu plano</p>
+
+                <div class="dash-grid">
+                    <!-- Cálculos avançados -->
+                    <div class="dash-card">
+                        <h3>📊 Cálculos Avançados</h3>
+                        <p>Newton-Raphson para período aproximado e TMA</p>
+                        <div class="form-group">
+                            <label>VP (R$)</label>
+                            <input type="number" id="advVp" value="10000">
+                        </div>
+                        <div class="form-group">
+                            <label>i (decimal a.t.)</label>
+                            <input type="number" id="advI" value="0.05" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>k desejado (decimal)</label>
+                            <input type="number" id="advK" value="0.20" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>TMA (%)</label>
+                            <input type="number" id="advTMA" value="40">
+                        </div>
+                        <button class="btn-primary btn-full" onclick="calcularAvancado()">Simular</button>
+                        <div id="advResult" class="adv-result"></div>
+                        <p class="usage-info" id="usageInfo"></p>
+                    </div>
+
+                    <!-- Métricas -->
+                    <div class="dash-card" id="metricsCard">
+                        <h3>📈 Métricas</h3>
+                        <div class="metrics-list">
+                            <div class="metric-row">
+                                <span>Período (Newton-Raphson)</span>
+                                <strong id="metricPeriod">-</strong>
+                            </div>
+                            <div class="metric-row">
+                                <span>Período para TMA</span>
+                                <strong id="metricTMA">-</strong>
+                            </div>
+                            <div class="metric-row">
+                                <span>Rendimento Anual</span>
+                                <strong id="metricAnual">-</strong>
+                            </div>
+                            <div class="metric-row">
+                                <span>Valor de Resgate</span>
+                                <strong id="metricResgate">-</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gráficos (apenas Enterprise) -->
+                    <div class="dash-card" id="chartsCard">
+                        <h3>📉 Gráficos <span class="lock-tag">Enterprise</span></h3>
+                        <div class="chart-area">
+                            <canvas id="chartCanvas" width="500" height="300"></canvas>
+                        </div>
+                        <button class="btn-secondary btn-full" onclick="gerarGrafico()">Gerar Gráfico</button>
+                    </div>
+
+                    <!-- Excel (apenas Enterprise) -->
+                    <div class="dash-card" id="excelCard">
+                        <h3>📥 Exportação Excel <span class="lock-tag">Enterprise</span></h3>
+                        <p>Baixe sua simulação completa de fluxo de caixa em formato CSV.</p>
+                        <button class="btn-primary btn-full" onclick="exportarExcel()">Baixar Arquivo</button>
+                    </div>
+                </div>
+
+                <button class="btn-secondary" onclick="logout()" style="margin-top: 30px;">Sair</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
