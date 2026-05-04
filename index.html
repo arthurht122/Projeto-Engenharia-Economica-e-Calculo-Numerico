@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReinvestK — Calcule o lucro extra dos juros compostos</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="#hero" class="logo">Reinvest<span>K</span></a>
+      <nav>
+        <a href="#produto">Produto</a>
+        <a href="#calculo">Cálculo grátis</a>
+        <a href="#planos">Planos</a>
+      </nav>
+      <a href="#cadastro" class="btn btn-primary btn-sm">Começar</a>
+    </div>
+  </header>
+
+  <!-- 1. Apresentação do produto -->
+  <section id="hero" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="badge">Engenharia Econômica + Cálculo Numérico</span>
+        <h1>Descubra quanto o <em>juros composto</em> realmente rende a mais.</h1>
+        <p class="lead">
+          O ReinvestK calcula o <strong>k</strong> — o ganho extra que o reinvestimento
+          gera sobre os juros simples — e entrega métricas, gráficos e planilhas para
+          decisões de investimento mais inteligentes.
+        </p>
+        <div class="cta-row">
+          <a href="#cadastro" class="btn btn-primary">Calcular meu k grátis</a>
+          <a href="#planos" class="btn btn-ghost">Ver planos</a>
+        </div>
+        <ul class="hero-bullets">
+          <li>Modelo validado em projeto acadêmico de Engenharia</li>
+          <li>Métrica de TMA, fluxo de caixa e período de retorno</li>
+          <li>Exportação em Excel no plano Enterprise</li>
+        </ul>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-head">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span class="hero-card-title">simulacao.py</span>
+        </div>
+        <pre class="code"><span class="c">#</span> <span class="c">k = ganho extra do juros composto</span>
+<span class="k">def</span> <span class="fn">calcula_k</span>(i, n):
+    <span class="k">return</span> (1 + i)**n - (n*i + 1)
+
+k = calcula_k(<span class="n">0.05</span>, <span class="n">12</span>)
+<span class="fn">print</span>(<span class="s">f"Lucro extra: {k*100:.2f}%"</span>)
+<span class="c"># &gt; Lucro extra: 19.59%</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Jornada -->
+  <section id="produto" class="journey">
+    <div class="container">
+      <h2 class="section-title">Sua jornada no ReinvestK</h2>
+      <ol class="stepper" id="stepper">
+        <li class="step active" data-step="1"><span>1</span>Cadastro</li>
+        <li class="step" data-step="2"><span>2</span>Cálculo grátis</li>
+        <li class="step" data-step="3"><span>3</span>Plano</li>
+        <li class="step" data-step="4"><span>4</span>Pagamento</li>
+        <li class="step" data-step="5"><span>5</span>Entrega</li>
+      </ol>
+
+      <!-- 2. Cadastro -->
+      <div class="panel active" id="panel-1">
+        <div id="cadastro" class="anchor"></div>
+        <h3>Crie sua conta</h3>
+        <p class="muted">Para liberar o cálculo grátis, deixe seu contato.</p>
+        <form id="form-cadastro" class="form">
+          <label>
+            Nome
+            <input type="text" name="nome" required placeholder="Como devemos te chamar?" />
+          </label>
+          <label>
+            E-mail
+            <input type="email" name="email" required placeholder="voce@email.com" />
+          </label>
+          <label>
+            Telefone
+            <input type="tel" name="telefone" required placeholder="(11) 90000-0000" />
+          </label>
+          <button type="submit" class="btn btn-primary">Avançar para cálculo</button>
+        </form>
+      </div>
+
+      <!-- 3. Cálculo de k grátis -->
+      <div class="panel" id="panel-2">
+        <div id="calculo" class="anchor"></div>
+        <h3>Cálculo de <em>k</em> grátis</h3>
+        <p class="muted">
+          Informe o capital, a taxa por trimestre e o período. Vamos calcular
+          o ganho extra gerado pelos juros compostos.
+        </p>
+        <form id="form-calculo" class="form form-grid">
+          <label>
+            Valor presente (R$)
+            <input type="number" name="vp" step="0.01" min="0" value="10000" required />
+          </label>
+          <label>
+            Taxa <span class="muted">(juros simples ao trimestre, %)</span>
+            <input type="number" name="i" step="0.01" min="0" value="5" required />
+          </label>
+          <label>
+            Período <span class="muted">(trimestres)</span>
+            <input type="number" name="n" step="1" min="1" value="12" required />
+          </label>
+          <button type="submit" class="btn btn-primary">Calcular k</button>
+        </form>
+
+        <div id="resultado-k" class="result hidden">
+          <div class="result-card">
+            <span class="result-label">Lucro extra (k)</span>
+            <strong id="r-k">—</strong>
+          </div>
+          <div class="result-card">
+            <span class="result-label">Rendimento total</span>
+            <strong id="r-total">—</strong>
+          </div>
+          <div class="result-card">
+            <span class="result-label">Valor acumulado</span>
+            <strong id="r-acum">—</strong>
+          </div>
+          <div class="result-card">
+            <span class="result-label">Rendimento anual</span>
+            <strong id="r-anual">—</strong>
+          </div>
+        </div>
+
+        <div class="actions hidden" id="acoes-calculo">
+          <button class="btn btn-primary" data-go="3">Quero ver os planos</button>
+        </div>
+      </div>
+
+      <!-- 4. Planos -->
+      <div class="panel" id="panel-3">
+        <div id="planos" class="anchor"></div>
+        <h3>Escolha seu plano</h3>
+        <p class="muted">Avance além do cálculo básico com métricas e relatórios completos.</p>
+
+        <div class="plans">
+          <article class="plan">
+            <header>
+              <h4>Plano Plus</h4>
+              <p class="price"><span>R$</span>100<small>/mês</small></p>
+            </header>
+            <ul>
+              <li>Acesso a métricas completas</li>
+              <li>3 simulações por mês</li>
+              <li>Histórico de cálculos</li>
+              <li>Suporte por e-mail</li>
+            </ul>
+            <button class="btn btn-ghost" data-plan="plus">Selecionar Plus</button>
+          </article>
+
+          <article class="plan plan-featured">
+            <span class="ribbon">Mais completo</span>
+            <header>
+              <h4>Plano Enterprise</h4>
+              <p class="price"><span>R$</span>1500<small>/mês</small></p>
+            </header>
+            <ul>
+              <li>Acesso a métricas completas</li>
+              <li>Simulações <strong>ilimitadas</strong></li>
+              <li>Gráficos de fluxo de caixa</li>
+              <li>Exportação em Excel</li>
+              <li>Suporte prioritário</li>
+            </ul>
+            <button class="btn btn-primary" data-plan="enterprise">Selecionar Enterprise</button>
+          </article>
+        </div>
+      </div>
+
+      <!-- 5. Pagamento -->
+      <div class="panel" id="panel-4">
+        <h3>Pagamento</h3>
+        <p class="muted">
+          Plano selecionado: <strong id="resumo-plano">—</strong> ·
+          Total: <strong id="resumo-valor">—</strong>
+        </p>
+        <form id="form-pagamento" class="form form-grid">
+          <label class="full">
+            Nome no cartão
+            <input type="text" name="card_name" required placeholder="Como impresso no cartão" />
+          </label>
+          <label class="full">
+            Número do cartão
+            <input type="text" name="card_number" required placeholder="0000 0000 0000 0000"
+                   inputmode="numeric" maxlength="19" />
+          </label>
+          <label>
+            Validade
+            <input type="text" name="card_exp" required placeholder="MM/AA" maxlength="5" />
+          </label>
+          <label>
+            CVV
+            <input type="text" name="card_cvv" required placeholder="123"
+                   inputmode="numeric" maxlength="4" />
+          </label>
+          <button type="submit" class="btn btn-primary full">Confirmar pagamento</button>
+        </form>
+      </div>
+
+      <!-- 6. Entrega -->
+      <div class="panel" id="panel-5">
+        <h3>Pagamento confirmado <span class="check">✓</span></h3>
+        <p class="muted">Veja abaixo as métricas calculadas e baixe os arquivos liberados pelo seu plano.</p>
+
+        <div id="entrega-metricas" class="result"></div>
+
+        <h4 class="files-title">Arquivos disponíveis</h4>
+        <ul id="entrega-arquivos" class="files"></ul>
+
+        <div class="actions">
+          <button class="btn btn-ghost" id="btn-reiniciar">Fazer nova simulação</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 ReinvestK · Projeto baseado em Engenharia Econômica e Cálculo Numérico</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
