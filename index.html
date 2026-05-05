@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReinvestK — Engenharia Econômica & Cálculo Numérico</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#topo" class="brand">
+        <span class="brand-mark">K</span>
+        <span class="brand-name">Reinvest<span class="gold">K</span></span>
+      </a>
+      <nav>
+        <a href="#produto">Produto</a>
+        <a href="#cadastro">Cadastro</a>
+        <a href="#teste">Teste Grátis</a>
+        <a href="#planos">Planos</a>
+      </nav>
+      <a href="#cadastro" class="btn btn-primary btn-sm">Começar agora</a>
+    </div>
+  </header>
+
+  <!-- 1. APRESENTAÇÃO DO PRODUTO -->
+  <section id="produto" class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <span class="badge">Engenharia Econômica + Cálculo Numérico</span>
+        <h1>Descubra o <span class="gold">K</span> que potencializa seus investimentos.</h1>
+        <p class="lead">
+          O ReinvestK é a plataforma definitiva para calcular o ganho extra dos
+          juros compostos sobre seus reinvestimentos. Tome decisões precisas,
+          com base em modelos matemáticos validados.
+        </p>
+        <div class="hero-cta">
+          <a href="#teste" class="btn btn-primary">Calcular K grátis</a>
+          <a href="#planos" class="btn btn-outline">Ver planos</a>
+        </div>
+        <ul class="hero-points">
+          <li>Modelagem precisa de juros simples vs compostos</li>
+          <li>Simulação de fluxo de caixa e retorno anual</li>
+          <li>Métricas e gráficos prontos para o seu relatório</li>
+        </ul>
+      </div>
+      <div class="hero-visual">
+        <div class="card glow">
+          <div class="card-row">
+            <span>Capital</span><strong>R$ 50.000</strong>
+          </div>
+          <div class="card-row">
+            <span>Taxa (i)</span><strong>2,5% a.t.</strong>
+          </div>
+          <div class="card-row">
+            <span>Períodos (n)</span><strong>20</strong>
+          </div>
+          <hr />
+          <div class="card-row big">
+            <span>K (juros compostos extra)</span><strong class="gold">14,02%</strong>
+          </div>
+          <div class="card-row big">
+            <span>Total acumulado</span><strong class="gold">R$ 81.930</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. CADASTRO -->
+  <section id="cadastro" class="section">
+    <div class="container narrow">
+      <header class="section-head">
+        <span class="step">Passo 1</span>
+        <h2>Crie sua conta</h2>
+        <p>Telefone e e-mail bastam. Sem cartão, sem burocracia.</p>
+      </header>
+      <form id="form-cadastro" class="form-card" novalidate>
+        <div class="field">
+          <label for="nome">Nome</label>
+          <input id="nome" type="text" placeholder="Seu nome completo" required />
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input id="email" type="email" placeholder="voce@email.com" required />
+          </div>
+          <div class="field">
+            <label for="telefone">Telefone</label>
+            <input id="telefone" type="tel" placeholder="(11) 99999-9999" required />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Cadastrar e liberar teste</button>
+        <p class="form-hint" id="cadastro-msg"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- 3. TESTE GRÁTIS -->
+  <section id="teste" class="section section-alt">
+    <div class="container">
+      <header class="section-head">
+        <span class="step">Passo 2</span>
+        <h2>Teste grátis — Cálculo de <span class="gold">K</span></h2>
+        <p>K é o rendimento extra obtido por juros compostos em relação aos juros simples.</p>
+        <p class="formula">K = (1 + i)<sup>n</sup> − (n · i + 1)</p>
+      </header>
+
+      <div class="calc-grid">
+        <form id="form-k" class="form-card">
+          <div class="field">
+            <label for="vp">Capital investido (VP)</label>
+            <input id="vp" type="number" step="0.01" min="0" placeholder="R$ 10.000" value="10000" />
+          </div>
+          <div class="field">
+            <label for="i">Taxa de juros simples (% por período)</label>
+            <input id="i" type="number" step="0.01" min="0" placeholder="2,5" value="2.5" />
+          </div>
+          <div class="field">
+            <label for="n">Número de períodos (n)</label>
+            <input id="n" type="number" step="1" min="1" placeholder="12" value="12" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Calcular K</button>
+        </form>
+
+        <div id="resultado-k" class="result-card locked">
+          <div class="lock-overlay">
+            <span class="lock-icon">🔒</span>
+            <p>Cadastre-se acima para liberar o cálculo gratuito.</p>
+          </div>
+          <div class="result-content">
+            <h3>Resultado</h3>
+            <div class="result-row"><span>K (% extra)</span><strong id="out-k" class="gold">—</strong></div>
+            <div class="result-row"><span>Lucro total (simples + composto)</span><strong id="out-total-pct">—</strong></div>
+            <div class="result-row"><span>Valor acumulado</span><strong id="out-acumulado" class="gold">—</strong></div>
+            <p class="result-foot">Para métricas completas, simulações e gráficos, escolha um plano.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. PLANOS -->
+  <section id="planos" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="step">Passo 3</span>
+        <h2>Escolha seu plano</h2>
+        <p>Do investidor independente à mesa de operações.</p>
+      </header>
+
+      <div class="plans">
+        <article class="plan">
+          <header>
+            <h3>Plus</h3>
+            <p class="price"><span class="currency">R$</span><span class="amount">100</span><span class="period">/mês</span></p>
+          </header>
+          <ul class="plan-features">
+            <li>Métricas completas</li>
+            <li>3 simulações por mês</li>
+            <li>Cálculo de K, juros simples e compostos</li>
+            <li>Suporte por e-mail</li>
+          </ul>
+          <button class="btn btn-outline btn-block" data-plan="plus" data-price="100">Assinar Plus</button>
+        </article>
+
+        <article class="plan plan-featured">
+          <span class="ribbon">Mais completo</span>
+          <header>
+            <h3>Enterprise</h3>
+            <p class="price"><span class="currency">R$</span><span class="amount">1.500</span><span class="period">/mês</span></p>
+          </header>
+          <ul class="plan-features">
+            <li>Métricas completas</li>
+            <li>Simulações ilimitadas</li>
+            <li>Gráficos interativos</li>
+            <li>Exportação em Excel com dados</li>
+            <li>Suporte prioritário</li>
+          </ul>
+          <button class="btn btn-primary btn-block" data-plan="enterprise" data-price="1500">Assinar Enterprise</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. PAGAMENTO (modal) -->
+  <div id="modal-pagamento" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="pg-title">
+      <button class="modal-close" data-close aria-label="Fechar">×</button>
+      <header>
+        <span class="step">Passo 4</span>
+        <h2 id="pg-title">Pagamento</h2>
+        <p>Plano selecionado: <strong id="pg-plano" class="gold">—</strong> · <strong id="pg-valor" class="gold">—</strong></p>
+      </header>
+      <form id="form-pagamento" class="form-card">
+        <div class="field">
+          <label for="card-name">Nome no cartão</label>
+          <input id="card-name" type="text" placeholder="Como impresso no cartão" required />
+        </div>
+        <div class="field">
+          <label for="card-number">Número do cartão</label>
+          <input id="card-number" type="text" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000" required />
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="card-exp">Validade</label>
+            <input id="card-exp" type="text" placeholder="MM/AA" maxlength="5" required />
+          </div>
+          <div class="field">
+            <label for="card-cvv">CVV</label>
+            <input id="card-cvv" type="text" inputmode="numeric" maxlength="4" placeholder="123" required />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Pagar e liberar acesso</button>
+        <p class="form-hint">Pagamento seguro · simulação de checkout</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. LIBERAÇÃO DO RESULTADO -->
+  <section id="liberacao" class="section section-alt hidden">
+    <div class="container narrow">
+      <header class="section-head">
+        <span class="step">Passo 5</span>
+        <h2>Acesso liberado <span class="gold">✓</span></h2>
+        <p id="lib-plano-info">Seu plano está ativo.</p>
+      </header>
+      <div class="form-card">
+        <h3>Resultado completo</h3>
+        <div class="result-row"><span>K (% extra)</span><strong id="lib-k" class="gold">—</strong></div>
+        <div class="result-row"><span>Juros simples acumulado</span><strong id="lib-js">—</strong></div>
+        <div class="result-row"><span>Juros compostos acumulado</span><strong id="lib-jc">—</strong></div>
+        <div class="result-row"><span>Lucro total (% + R$)</span><strong id="lib-total">—</strong></div>
+        <div class="result-row big"><span>Valor acumulado</span><strong id="lib-acum" class="gold">—</strong></div>
+
+        <div id="lib-plus-only">
+          <p class="form-hint">Plano Plus · simulações restantes este mês: <strong id="lib-restantes">3</strong></p>
+        </div>
+
+        <div id="lib-enterprise-only" class="hidden">
+          <hr />
+          <h4>Recursos Enterprise</h4>
+          <div class="enterprise-grid">
+            <div class="ent-card">
+              <h5>Gráfico de evolução</h5>
+              <canvas id="lib-chart" width="520" height="220"></canvas>
+            </div>
+            <div class="ent-card">
+              <h5>Exportação</h5>
+              <p>Baixe os dados completos em planilha.</p>
+              <button id="btn-excel" class="btn btn-outline">Baixar Excel (.csv)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> ReinvestK · Engenharia Econômica & Cálculo Numérico</span>
+      <span class="muted">Tema ouro & preto</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
