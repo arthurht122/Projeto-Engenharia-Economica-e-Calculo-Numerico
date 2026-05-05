@@ -100,8 +100,8 @@ function calcularMetricas({ vp, iPct, n, contratoMes, tmaPct, kAlvoPct }) {
 
   const valorJurosSimples = vp * ks;
   const valorJurosCompostos = vp * kc;
-  const valorAcumuladoJS = vp + valorJurosSimples;
-  const valorAcumuladoJC = vp + valorJurosCompostos;
+  const valorAcumuladoJS = valorJurosSimples;
+  const valorAcumuladoJC = valorJurosCompostos;
   const valorAcumuladoTotal = vp + valorJurosSimples + valorJurosCompostos;
 
   const periodoKAlvo = periodoParaK(i, (kAlvoPct || 0) / 100);
