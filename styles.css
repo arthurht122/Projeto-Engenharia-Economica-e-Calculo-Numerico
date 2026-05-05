@@ -40,6 +40,8 @@ a:hover { color: var(--gold-2); }
   padding: 0 24px;
 }
 .narrow { max-width: 720px; }
+.wide { max-width: 1280px; }
+code { font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace; }
 
 /* ===== Navbar ===== */
 .navbar {
@@ -282,16 +284,22 @@ a:hover { color: var(--gold-2); }
 .kalvo-row .field { flex: 1; margin-bottom: 0; }
 @media (max-width: 520px) { .kalvo-row { flex-direction: column; align-items: stretch; } }
 
-.charts-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;
+.charts-stack {
+  display: flex; flex-direction: column; gap: 22px; margin-top: 12px;
 }
-@media (max-width: 760px) { .charts-grid { grid-template-columns: 1fr; } }
 .ent-card {
   background: #0e0e0e; border: 1px solid var(--gold-line);
-  border-radius: 10px; padding: 18px;
+  border-radius: 12px; padding: 22px;
 }
-.ent-card h5 { margin: 0 0 10px; color: var(--gold); font-family: 'Cinzel', serif; }
+.ent-card h5 {
+  margin: 0 0 14px; color: var(--gold);
+  font-family: 'Cinzel', serif; font-size: 1.05rem;
+}
 .ent-card canvas { width: 100%; height: auto; display: block; }
+.ent-card code {
+  background: rgba(212,175,55,0.08); border: 1px solid var(--gold-line);
+  padding: 1px 6px; border-radius: 4px; color: var(--gold); font-size: 0.85em;
+}
 
 /* sub-itens nas listas dos planos */
 .plan-features li.sub {
