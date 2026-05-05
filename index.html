@@ -114,13 +114,25 @@
             <label for="vp">Capital investido (VP)</label>
             <input id="vp" type="number" step="0.01" min="0" placeholder="R$ 10.000" value="10000" />
           </div>
-          <div class="field">
-            <label for="i">Taxa de juros simples (% por período)</label>
-            <input id="i" type="number" step="0.01" min="0" placeholder="2,5" value="2.5" />
+          <div class="grid-2">
+            <div class="field">
+              <label for="i">Juros simples (% por período)</label>
+              <input id="i" type="number" step="0.01" min="0" placeholder="2,5" value="2.5" />
+            </div>
+            <div class="field">
+              <label for="n">Períodos (n)</label>
+              <input id="n" type="number" step="1" min="1" placeholder="12" value="12" />
+            </div>
           </div>
-          <div class="field">
-            <label for="n">Número de períodos (n)</label>
-            <input id="n" type="number" step="1" min="1" placeholder="12" value="12" />
+          <div class="grid-2">
+            <div class="field">
+              <label for="contrato">Duração do contrato (meses)</label>
+              <input id="contrato" type="number" step="1" min="1" placeholder="3" value="3" />
+            </div>
+            <div class="field">
+              <label for="tma">TMA — Taxa mínima atratividade (% a.a.)</label>
+              <input id="tma" type="number" step="0.01" min="0" placeholder="12" value="12" />
+            </div>
           </div>
           <button type="submit" class="btn btn-primary btn-block">Calcular K</button>
         </form>
@@ -158,9 +170,13 @@
             <p class="price"><span class="currency">R$</span><span class="amount">100</span><span class="period">/mês</span></p>
           </header>
           <ul class="plan-features">
-            <li>Métricas completas</li>
             <li>3 simulações por mês</li>
-            <li>Cálculo de K, juros simples e compostos</li>
+            <li>Métricas completas:</li>
+            <li class="sub">K (% extra dos juros compostos)</li>
+            <li class="sub">Período aproximado para um K alvo</li>
+            <li class="sub">Período em função da TMA</li>
+            <li class="sub">Juros simples, compostos e total</li>
+            <li class="sub">Valor acumulado total e por tipo de juros</li>
             <li>Suporte por e-mail</li>
           </ul>
           <button class="btn btn-outline btn-block" data-plan="plus" data-price="100">Assinar Plus</button>
@@ -173,10 +189,14 @@
             <p class="price"><span class="currency">R$</span><span class="amount">1.500</span><span class="period">/mês</span></p>
           </header>
           <ul class="plan-features">
-            <li>Métricas completas</li>
+            <li>Tudo do Plus</li>
             <li>Simulações ilimitadas</li>
-            <li>Gráficos interativos</li>
-            <li>Exportação em Excel com dados</li>
+            <li>Todos os gráficos gerados:</li>
+            <li class="sub">Evolução do valor acumulado</li>
+            <li class="sub">Juros simples vs compostos</li>
+            <li class="sub">Retorno anual (%)</li>
+            <li class="sub">Participação dos compostos (%)</li>
+            <li>Excel de análise (fluxo de caixa do .ipynb)</li>
             <li>Suporte prioritário</li>
           </ul>
           <button class="btn btn-primary btn-block" data-plan="enterprise" data-price="1500">Assinar Enterprise</button>
@@ -222,38 +242,65 @@
 
   <!-- 6. LIBERAÇÃO DO RESULTADO -->
   <section id="liberacao" class="section section-alt hidden">
-    <div class="container narrow">
+    <div class="container">
       <header class="section-head">
         <span class="step">Passo 5</span>
         <h2>Acesso liberado <span class="gold">✓</span></h2>
         <p id="lib-plano-info">Seu plano está ativo.</p>
       </header>
+
       <div class="form-card">
-        <h3>Resultado completo</h3>
-        <div class="result-row"><span>K (% extra)</span><strong id="lib-k" class="gold">—</strong></div>
-        <div class="result-row"><span>Juros simples acumulado</span><strong id="lib-js">—</strong></div>
-        <div class="result-row"><span>Juros compostos acumulado</span><strong id="lib-jc">—</strong></div>
-        <div class="result-row"><span>Lucro total (% + R$)</span><strong id="lib-total">—</strong></div>
-        <div class="result-row big"><span>Valor acumulado</span><strong id="lib-acum" class="gold">—</strong></div>
+        <h3>Métricas completas</h3>
+        <div class="metrics-grid">
+          <div class="metric"><span class="m-label">K (% extra dos compostos)</span><strong id="lib-k" class="gold">—</strong></div>
+          <div class="metric"><span class="m-label">Período aproximado para K alvo</span><strong id="lib-periodo-k">—</strong></div>
+          <div class="metric"><span class="m-label">Período em função da TMA</span><strong id="lib-periodo-tma">—</strong></div>
+          <div class="metric"><span class="m-label">Juros simples (%)</span><strong id="lib-js-pct">—</strong></div>
+          <div class="metric"><span class="m-label">Juros compostos (%)</span><strong id="lib-jc-pct">—</strong></div>
+          <div class="metric"><span class="m-label">Juros total (%)</span><strong id="lib-jt-pct">—</strong></div>
+          <div class="metric"><span class="m-label">Valor acumulado — juros simples</span><strong id="lib-js-val">—</strong></div>
+          <div class="metric"><span class="m-label">Valor acumulado — juros compostos</span><strong id="lib-jc-val">—</strong></div>
+          <div class="metric metric-hi"><span class="m-label">Valor acumulado total</span><strong id="lib-acum" class="gold">—</strong></div>
+        </div>
+
+        <div class="kalvo-row">
+          <div class="field">
+            <label for="kalvo">K alvo (%) para cálculo de período</label>
+            <input id="kalvo" type="number" step="0.01" min="0" value="5" />
+          </div>
+          <button id="btn-recalc" class="btn btn-outline">Recalcular período</button>
+        </div>
 
         <div id="lib-plus-only">
-          <p class="form-hint">Plano Plus · simulações restantes este mês: <strong id="lib-restantes">3</strong></p>
+          <p class="form-hint">Plano <strong>Plus</strong> · simulações restantes este mês: <strong id="lib-restantes">3</strong></p>
         </div>
 
         <div id="lib-enterprise-only" class="hidden">
           <hr />
-          <h4>Recursos Enterprise</h4>
-          <div class="enterprise-grid">
+          <h4>Gráficos gerados</h4>
+          <div class="charts-grid">
             <div class="ent-card">
-              <h5>Gráfico de evolução</h5>
-              <canvas id="lib-chart" width="520" height="220"></canvas>
+              <h5>Evolução do valor acumulado</h5>
+              <canvas id="chart-acum" width="540" height="240"></canvas>
             </div>
             <div class="ent-card">
-              <h5>Exportação</h5>
-              <p>Baixe os dados completos em planilha.</p>
-              <button id="btn-excel" class="btn btn-outline">Baixar Excel (.csv)</button>
+              <h5>Juros simples vs compostos (acumulados)</h5>
+              <canvas id="chart-juros" width="540" height="240"></canvas>
+            </div>
+            <div class="ent-card">
+              <h5>Retorno anual (%)</h5>
+              <canvas id="chart-anual" width="540" height="240"></canvas>
+            </div>
+            <div class="ent-card">
+              <h5>Participação dos compostos (%)</h5>
+              <canvas id="chart-part" width="540" height="240"></canvas>
             </div>
           </div>
+
+          <hr />
+          <h4>Excel de análise</h4>
+          <p class="muted">Mesmo fluxo de caixa do notebook (.ipynb): período, valor acumulado, juros simples, juros compostos, retorno anual e participação.</p>
+          <button id="btn-excel" class="btn btn-primary">Baixar Excel (.csv)</button>
         </div>
       </div>
     </div>

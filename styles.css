@@ -259,14 +259,45 @@ a:hover { color: var(--gold-2); }
 .modal-close:hover { color: var(--gold); }
 
 /* ===== Liberação ===== */
-.enterprise-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-top: 12px; }
-@media (max-width: 700px) { .enterprise-grid { grid-template-columns: 1fr; } }
+.metrics-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin: 18px 0 18px;
+}
+@media (max-width: 800px) { .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .metrics-grid { grid-template-columns: 1fr; } }
+.metric {
+  background: #0e0e0e; border: 1px solid var(--gold-line);
+  border-radius: 10px; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.metric .m-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+.metric strong { font-size: 1.1rem; }
+.metric-hi { border-color: var(--gold); box-shadow: var(--shadow-gold); }
+.metric-hi strong { font-size: 1.35rem; }
+
+.kalvo-row {
+  display: flex; align-items: end; gap: 14px;
+  margin: 8px 0 18px;
+}
+.kalvo-row .field { flex: 1; margin-bottom: 0; }
+@media (max-width: 520px) { .kalvo-row { flex-direction: column; align-items: stretch; } }
+
+.charts-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;
+}
+@media (max-width: 760px) { .charts-grid { grid-template-columns: 1fr; } }
 .ent-card {
   background: #0e0e0e; border: 1px solid var(--gold-line);
   border-radius: 10px; padding: 18px;
 }
 .ent-card h5 { margin: 0 0 10px; color: var(--gold); font-family: 'Cinzel', serif; }
 .ent-card canvas { width: 100%; height: auto; display: block; }
+
+/* sub-itens nas listas dos planos */
+.plan-features li.sub {
+  padding-left: 38px; color: var(--muted); font-size: 0.92rem;
+}
+.plan-features li.sub::before { content: "·"; left: 22px; }
 
 /* ===== Footer ===== */
 .footer { border-top: 1px solid var(--gold-line); padding: 28px 0; margin-top: 40px; }
