@@ -134,7 +134,7 @@ function gerarFluxo({ vp, i, contratoMes, qtdeFluxoMeses }) {
     juros_compostos.push(t === 1 ? 0 : kc_puro * vp);
 
     if (t > 0) {
-      retorno_anual.push((kc / (t / contratoMes)) * 100);
+      retorno_anual.push((kc / ((t*contratoMes)/12)) * 100);
     } else {
       retorno_anual.push(0);
     }
