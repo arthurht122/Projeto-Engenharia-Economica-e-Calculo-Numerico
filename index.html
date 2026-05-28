@@ -19,6 +19,7 @@
         <a href="#produto">Produto</a>
         <a href="#cadastro">Cadastro</a>
         <a href="#teste">Teste Grátis</a>
+        <a href="#investimentos">Investimentos</a>
         <a href="#planos">Planos</a>
       </nav>
       <a href="#cadastro" class="btn btn-primary btn-sm">Começar agora</a>
@@ -115,8 +116,8 @@
             <input id="vp" type="number" step="0.01" min="0" placeholder="R$ 10.000" value="10000" />
           </div>
           <div class="field">
-            <label for="i">Juros simples — i (% por contrato)</label>
-            <input id="i" type="number" step="0.01" min="0" placeholder="2,5" value="2.5" />
+            <label for="i">Juros simples — i (% a.a.)</label>
+            <input id="i" type="number" step="0.01" min="0" placeholder="12,5" value="12.5" />
           </div>
           <div class="grid-2">
             <div class="field">
@@ -153,6 +154,45 @@
             <div class="result-row"><span>Valor acumulado</span><strong id="out-acumulado" class="gold">—</strong></div>
             <p class="result-foot">Para métricas completas, simulações e gráficos, escolha um plano.</p>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3.1 INVESTIMENTOS ATUAIS -->
+  <section id="investimentos" class="section">
+    <div class="container wide">
+      <header class="section-head">
+        <span class="step">Mercado</span>
+        <h2>Investimentos atuais — renda fixa</h2>
+        <p>Dados extraídos via Python (Playwright) do <a href="https://investidor10.com.br/renda-fixa/" target="_blank" rel="noopener">Investidor10</a>. Clique em <strong>Simular K</strong> para usar a rentabilidade no cálculo.</p>
+        <p class="muted" id="inv-status">Carregando…</p>
+      </header>
+
+      <div class="form-card inv-wrap">
+        <div class="inv-toolbar">
+          <input id="inv-search" type="text" placeholder="Filtrar por descrição, tipo, emissor…" />
+          <select id="inv-tipo">
+            <option value="">Todos os tipos</option>
+          </select>
+          <button id="inv-reload" class="btn btn-outline btn-sm">Recarregar</button>
+        </div>
+        <div class="table-wrap">
+          <table id="inv-table" class="inv-table">
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Tipo</th>
+                <th>Inv. Mínimo</th>
+                <th>Rent. Bruta (a.a)</th>
+                <th>Rent. Líquida (a.a)</th>
+                <th>Liquidez</th>
+                <th>Prazo</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="inv-tbody"></tbody>
+          </table>
         </div>
       </div>
     </div>

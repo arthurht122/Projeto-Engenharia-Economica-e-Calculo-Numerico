@@ -301,6 +301,48 @@ code { font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace; }
   padding: 1px 6px; border-radius: 4px; color: var(--gold); font-size: 0.85em;
 }
 
+/* ===== Investimentos ===== */
+.inv-wrap { padding: 22px; }
+.inv-toolbar {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 16px; align-items: center;
+}
+.inv-toolbar input, .inv-toolbar select {
+  background: #0e0e0e; border: 1px solid #2a2a2a;
+  border-radius: 10px; padding: 10px 12px; color: var(--text);
+  font: inherit;
+}
+.inv-toolbar input { flex: 1 1 260px; }
+.inv-toolbar input:focus, .inv-toolbar select:focus {
+  outline: none; border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-soft);
+}
+
+.table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--gold-line); }
+.inv-table {
+  width: 100%; border-collapse: collapse; min-width: 880px;
+  font-size: 0.93rem;
+}
+.inv-table th, .inv-table td {
+  padding: 12px 14px; text-align: left;
+  border-bottom: 1px solid rgba(212,175,55,0.12);
+}
+.inv-table thead th {
+  background: rgba(212,175,55,0.08); color: var(--gold);
+  font-weight: 600; font-size: 0.82rem;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  position: sticky; top: 0;
+}
+.inv-table tbody tr:hover { background: rgba(212,175,55,0.04); }
+.inv-table td.rent { color: var(--gold); font-weight: 600; }
+.inv-table td.tipo {
+  font-family: 'Cinzel', serif; font-weight: 700;
+  color: var(--gold-2); white-space: nowrap;
+}
+.inv-table .btn { padding: 6px 14px; font-size: 0.82rem; }
+.inv-table tbody tr:last-child td { border-bottom: none; }
+.inv-empty { padding: 32px; text-align: center; color: var(--muted); }
+
 /* sub-itens nas listas dos planos */
 .plan-features li.sub {
   padding-left: 38px; color: var(--muted); font-size: 0.92rem;

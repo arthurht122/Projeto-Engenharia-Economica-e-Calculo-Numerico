@@ -81,8 +81,10 @@ function periodoParaTMA(i, tmaPct, contratoMes, n0 = 4) {
 /* ============================================================
    CALCULO PRINCIPAL E FLUXO DE CAIXA (igual ao notebook)
    ============================================================ */
-function calcularMetricas({ vp, iPct, contratoMes, ntotMes, tmaPct, kAlvoPct }) {
-  const i = iPct / 100;
+// iAnualPct e a taxa anual em %. Conversao para taxa por contrato:
+//   i_efetivo (decimal por contrato) = (contratoMes/12) * (iAnualPct/100)
+function calcularMetricas({ vp, iAnualPct, contratoMes, ntotMes, tmaPct, kAlvoPct }) {
+  const i = (contratoMes / 12) * (iAnualPct / 100);
   const n = ntotMes / contratoMes; // periodo efetivo
 
   // mesmo do notebook:
@@ -103,7 +105,7 @@ function calcularMetricas({ vp, iPct, contratoMes, ntotMes, tmaPct, kAlvoPct }) 
     : i * 100 * (12 / contratoMes);
 
   return {
-    vp, iPct, i, n, ntotMes, contratoMes, tmaPct, kAlvoPct,
+    vp, iAnualPct, i, n, ntotMes, contratoMes, tmaPct, kAlvoPct,
     kcPct: kc * 100,
     ksPct: ks * 100,
     kTotalPct: kTotal * 100,
@@ -183,7 +185,7 @@ const formK = document.getElementById('form-k');
 function lerInputs() {
   return {
     vp: parseFloat(document.getElementById('vp').value) || 0,
-    iPct: parseFloat(document.getElementById('i').value) || 0,
+    iAnualPct: parseFloat(document.getElementById('i').value) || 0,
     contratoMes: parseFloat(document.getElementById('contrato').value) || 3,
     ntotMes: parseFloat(document.getElementById('ntot').value) || 0,
     tmaPct: parseFloat(document.getElementById('tma').value) || 0,
@@ -199,14 +201,15 @@ formK.addEventListener('submit', (e) => {
     return;
   }
   const v = lerInputs();
-  if (v.vp <= 0 || v.iPct <= 0 || v.ntotMes <= 0 || v.contratoMes <= 0) {
-    alert('Preencha capital, taxa, contrato e período investido com valores positivos.');
+  if (v.vp <= 0 || v.iAnualPct <= 0 || v.ntotMes <= 0 || v.contratoMes <= 0) {
+    alert('Preencha capital, taxa anual, contrato e período investido com valores positivos.');
     return;
   }
   const r = calcularMetricas({ ...v, kAlvoPct: 0 });
   state.ultimoCalculo = r;
+  const iEfetivo = (v.contratoMes / 12) * (v.iAnualPct / 100);
   state.ultimoFluxo = gerarFluxo({
-    vp: v.vp, i: v.iPct / 100, contratoMes: v.contratoMes,
+    vp: v.vp, i: iEfetivo, contratoMes: v.contratoMes,
     qtdeFluxoMeses: v.fluxoMes > 0 ? v.fluxoMes : v.ntotMes,
   });
 
@@ -277,9 +280,9 @@ function liberarResultado() {
 
   if (!state.ultimoCalculo) {
     state.ultimoCalculo = calcularMetricas({
-      vp: 10000, iPct: 2.5, contratoMes: 3, ntotMes: 36, tmaPct: 12, kAlvoPct: 5,
+      vp: 10000, iAnualPct: 12.5, contratoMes: 3, ntotMes: 36, tmaPct: 12, kAlvoPct: 5,
     });
-    state.ultimoFluxo = gerarFluxo({ vp: 10000, i: 0.025, contratoMes: 3, qtdeFluxoMeses: 36 });
+    state.ultimoFluxo = gerarFluxo({ vp: 10000, i: (3 / 12) * (12.5 / 100), contratoMes: 3, qtdeFluxoMeses: 36 });
   }
   const r = state.ultimoCalculo;
   preencherMetricas(r);
@@ -541,7 +544,7 @@ function desenharTodosGraficos(fluxo, r) {
     drawGrid(ctx, b, W, H, minY, maxY, (v) => 'R$ ' + Math.round(v).toLocaleString('pt-BR'));
     drawAxes(ctx, b, W, H);
     drawXAxisLabels(ctx, b, W, H, peri);
-    drawTitle(ctx, b, `VP = ${fmtBRL(vp)}  |  i = ${r.iPct}% por contrato  |  contrato = ${r.contratoMes} meses  |  n efetivo = ${fmtNum(r.n, 2)}`);
+    drawTitle(ctx, b, `VP = ${fmtBRL(vp)}  |  i = ${r.iAnualPct}% a.a.  |  contrato = ${r.contratoMes} meses  |  n efetivo = ${fmtNum(r.n, 2)}`);
     drawLegend(ctx, b, W, [
       { kind: 'line', color: COLORS.azul,    marker: 'circle',   label: 'Valor Acumulado (Lucro Total)' },
       { kind: 'line', color: COLORS.vermelho,marker: 'square',   label: 'Juros Simples Acum.' },
@@ -631,7 +634,7 @@ function desenharTodosGraficos(fluxo, r) {
     drawGrid(ctx, b, W, H, minY1, maxY1, (v) => 'R$ ' + Math.round(v).toLocaleString('pt-BR'));
     drawAxes(ctx, b, W, H);
     drawXAxisLabels(ctx, b, W, H, peri);
-    drawTitle(ctx, b, `Visão consolidada — VP = ${fmtBRL(vp)} | i = ${r.iPct}% (contrato ${r.contratoMes} meses)`);
+    drawTitle(ctx, b, `Visão consolidada — VP = ${fmtBRL(vp)} | i = ${r.iAnualPct}% a.a. (contrato ${r.contratoMes} meses)`);
 
     // labels eixo direito (%)
     ctx.fillStyle = COLORS.roxo;
@@ -710,3 +713,133 @@ document.getElementById('btn-excel').addEventListener('click', () => {
   a.click();
   URL.revokeObjectURL(url);
 });
+
+/* ============================================================
+   INVESTIMENTOS ATUAIS (consome data/investimentos.json)
+   ============================================================ */
+const FALLBACK_INV = [
+  { Descricao: 'CDB Banco BMG', Tipo: 'CDB', 'Investimento Minimo': 'R$ 1.000,00',
+    'Rentabilidade Bruta': '14,50% a.a', 'Rentabilidade Liquida': '11,60% a.a',
+    Liquidez: 'No Vencimento', 'Prazo de Resgate': '28/05/2028',
+    rentabilidade_bruta_aa: 14.5, rentabilidade_liquida_aa: 11.6,
+    investimento_minimo_num: 1000, prazo_meses: 24 },
+  { Descricao: 'LCA Banco Daycoval', Tipo: 'LCA', 'Investimento Minimo': 'R$ 1.000,00',
+    'Rentabilidade Bruta': '13,20% a.a', 'Rentabilidade Liquida': '13,20% a.a',
+    Liquidez: 'No Vencimento', 'Prazo de Resgate': '28/05/2027',
+    rentabilidade_bruta_aa: 13.2, rentabilidade_liquida_aa: 13.2,
+    investimento_minimo_num: 1000, prazo_meses: 12 },
+];
+
+let investimentos = [];
+
+function parseRentBR(t) {
+  if (typeof t === 'number') return t;
+  if (!t) return null;
+  const m = String(t).match(/([\d.,]+)\s*%/);
+  if (!m) return null;
+  return parseFloat(m[1].replace(/\./g, '').replace(',', '.'));
+}
+
+async function carregarInvestimentos() {
+  const status = document.getElementById('inv-status');
+  status.textContent = 'Carregando…';
+  try {
+    const resp = await fetch('data/investimentos.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error(resp.status);
+    const json = await resp.json();
+    investimentos = json.investimentos || [];
+    const dt = json.atualizado_em ? new Date(json.atualizado_em) : null;
+    status.textContent = `${investimentos.length} investimentos · atualizado em ${dt ? dt.toLocaleString('pt-BR') : '—'}`;
+  } catch (err) {
+    investimentos = FALLBACK_INV;
+    status.textContent = `Usando dataset embutido (rode scraper/fetch_investimentos.py para atualizar).`;
+  }
+  popularFiltroTipos();
+  renderInvestimentos();
+}
+
+function popularFiltroTipos() {
+  const sel = document.getElementById('inv-tipo');
+  const tipos = [...new Set(investimentos.map((x) => x.Tipo).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">Todos os tipos</option>' +
+    tipos.map((t) => `<option value="${t}">${t}</option>`).join('');
+}
+
+function filtrar(lista) {
+  const q = (document.getElementById('inv-search').value || '').toLowerCase().trim();
+  const tipo = document.getElementById('inv-tipo').value;
+  return lista.filter((x) => {
+    if (tipo && x.Tipo !== tipo) return false;
+    if (!q) return true;
+    return [x.Descricao, x.Tipo, x.Emissor, x.Distribuidor]
+      .filter(Boolean).join(' ').toLowerCase().includes(q);
+  });
+}
+
+function renderInvestimentos() {
+  const tbody = document.getElementById('inv-tbody');
+  const lista = filtrar(investimentos);
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="8" class="inv-empty">Nenhum investimento encontrado para o filtro.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lista.map((x, idx) => {
+    const rentB = x.rentabilidade_bruta_aa ?? parseRentBR(x['Rentabilidade Bruta']);
+    const rentL = x.rentabilidade_liquida_aa ?? parseRentBR(x['Rentabilidade Liquida']);
+    const prazo = x.prazo_meses ? `${x.prazo_meses} meses` : (x['Prazo de Resgate'] || '—');
+    return `
+      <tr>
+        <td>${x.Descricao || '—'}</td>
+        <td class="tipo">${x.Tipo || '—'}</td>
+        <td>${x['Investimento Minimo'] || '—'}</td>
+        <td class="rent">${rentB != null ? rentB.toFixed(2) + '%' : '—'}</td>
+        <td>${rentL != null ? rentL.toFixed(2) + '%' : '—'}</td>
+        <td>${x.Liquidez || '—'}</td>
+        <td>${prazo}</td>
+        <td><button class="btn btn-primary btn-sm" data-sim="${idx}">Simular K</button></td>
+      </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('button[data-sim]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const lista2 = filtrar(investimentos);
+      simularComInvestimento(lista2[parseInt(btn.dataset.sim, 10)]);
+    });
+  });
+}
+
+function simularComInvestimento(inv) {
+  if (!inv) return;
+  const rentB = inv.rentabilidade_bruta_aa ?? parseRentBR(inv['Rentabilidade Bruta']);
+  if (rentB == null) {
+    alert('Investimento sem rentabilidade bruta numérica.');
+    return;
+  }
+  // pré-preenche o formulário com taxa anual e prazo
+  document.getElementById('i').value = rentB;
+  if (inv.investimento_minimo_num) {
+    const vpAtual = parseFloat(document.getElementById('vp').value) || 0;
+    if (vpAtual < inv.investimento_minimo_num) {
+      document.getElementById('vp').value = inv.investimento_minimo_num;
+    }
+  }
+  if (inv.prazo_meses) {
+    document.getElementById('ntot').value = inv.prazo_meses;
+    document.getElementById('fluxo').value = inv.prazo_meses;
+  }
+  document.getElementById('teste').scrollIntoView({ behavior: 'smooth' });
+  // dispara o cálculo automaticamente se o usuário já estiver cadastrado
+  if (state.cadastrado) {
+    document.getElementById('form-k').requestSubmit();
+  } else {
+    setTimeout(() => {
+      alert('Cadastre-se acima para liberar o cálculo. Os campos já foram preenchidos com este investimento.');
+    }, 400);
+  }
+}
+
+document.getElementById('inv-search').addEventListener('input', renderInvestimentos);
+document.getElementById('inv-tipo').addEventListener('change', renderInvestimentos);
+document.getElementById('inv-reload').addEventListener('click', carregarInvestimentos);
+
+carregarInvestimentos();
